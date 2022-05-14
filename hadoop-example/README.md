@@ -1,18 +1,14 @@
-## Project: maven-hadoop-java-wordcount-template
-This is a Maven Hadoop Java project template. This boilerplate skeleton code contains one Driver, a Mapper and a Reducer ready to be modified with your code (they contain the classic wordcount example).
+## Hadoop Map Reduce作业
+统计每一个手机号耗费的总上行流量、下行流量、总流量。
 
-In [this article](https://nosqlnocry.wordpress.com/2015/03/13/hadoop-mapreduce-wordcount-example-in-java-introduction-to-hadoop-job/) you can find instructions about how to import the project in Eclipse and modify it, together with an explanation about Hadoop jobs.
+### 基本思路：
+Map 阶段：
 
-### Customize your job
-Modify the Mapper and Recuder inside the `src/main/java/com/example` folder and the maven file `pom.xml`. 
+读取一行数据，切分字段。
+抽取手机号、上行流量、下行流量。
+以手机号为 key，bean 对象为 value 输出，即 context.write(手机号，bean)。
+Reduce 阶段：
 
-### Compile your project
-To compile the project use the maven command
-
-    mvn clean package
-
-### Run your application
-Inside your shell with Hadoop
-
-    hadoop jar your-hadoop-application.jar arg0 arg1 ...
-# hadoop-example
+累加上行流量和下行流量得到总流量。
+实现自定义的 bean 来封装流量信息，并将 bean 作为 map 输出的 key 来传输。
+MR 程序在处理数据的过程中会对数据排序 (map 输出的 kv 对传输到 reduce 之前，会排序)，排序的依据是 map 输出的 key
